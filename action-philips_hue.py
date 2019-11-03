@@ -58,7 +58,6 @@ class Skill_RobotCommander:
 
     def callback(self, hermes, intent_message):
         print("[COMMAND] Received")
-
         intent_name = intent_message.intent.intent_name
         if ':' in intent_name:
             intent_name = intent_name.split(":")[1]
@@ -72,29 +71,29 @@ class Skill_RobotCommander:
             self.queue.put(self.right(hermes, intent_message))
 			
 			
-	def forward(self, hermes, intent_message):
+    def forward(self, hermes, intent_message):
         percent = self.extract_percentage(intent_message, None)
         if percent is None:
             self.terminate_feedback(hermes, intent_message)
             return
-		ser.write(b'FORWARD')
+        ser.write(b'FORWARD')
         self.terminate_feedback(hermes, intent_message)
 		
-	def backward(self, hermes, intent_message):
+    def backward(self, hermes, intent_message):
         percent = self.extract_percentage(intent_message, None)
         if percent is None:
             self.terminate_feedback(hermes, intent_message)
             return
-		ser.write(b'BACKWARD')
+        ser.write(b'BACKWARD')
         self.terminate_feedback(hermes, intent_message)
 		
 		
     def left(self, hermes, intent_message):
-		ser.write(b'LEFT')
+        ser.write(b'LEFT')
         self.terminate_feedback(hermes, intent_message)
 
     def right(self, hermes, intent_message):
-		ser.write(b'RIGHT')
+        ser.write(b'RIGHT')
         self.terminate_feedback(hermes, intent_message)
 
     

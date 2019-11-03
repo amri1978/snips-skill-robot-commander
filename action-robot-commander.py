@@ -24,6 +24,7 @@ _id = "snips-skill-robot-commander"
 
 ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
 
+#Amine 16h54
 class Skill_RobotCommander:
     def __init__(self):
 
@@ -31,6 +32,7 @@ class Skill_RobotCommander:
         self.thread_handler = ThreadHandler()
         self.thread_handler.run(target=self.start_blocking)
         self.thread_handler.start_run_loop()
+        print(ser)
 
     def start_blocking(self, run_event):
         while run_event.is_set():
@@ -58,7 +60,6 @@ class Skill_RobotCommander:
 
     def callback(self, hermes, intent_message):
         print("[COMMAND] Received")
-
         intent_name = intent_message.intent.intent_name
         if ':' in intent_name:
             intent_name = intent_name.split(":")[1]
@@ -70,31 +71,29 @@ class Skill_RobotCommander:
             self.queue.put(self.left(hermes, intent_message))
         if intent_name == 'right':
             self.queue.put(self.right(hermes, intent_message))
-			
-			
-	def forward(self, hermes, intent_message):
+						
+    def forward(self, hermes, intent_message):
         percent = self.extract_percentage(intent_message, None)
         if percent is None:
             self.terminate_feedback(hermes, intent_message)
             return
-		ser.write(b'FORWARD')
+        ser.write(b'FORWARD\n')
         self.terminate_feedback(hermes, intent_message)
 		
-	def backward(self, hermes, intent_message):
+    def backward(self, hermes, intent_message):
         percent = self.extract_percentage(intent_message, None)
         if percent is None:
             self.terminate_feedback(hermes, intent_message)
             return
-		ser.write(b'BACKWARD')
+        ser.write(b'BACKWARD\n')
         self.terminate_feedback(hermes, intent_message)
-		
-		
+				
     def left(self, hermes, intent_message):
-
+        ser.write(b'LEFT\n')
         self.terminate_feedback(hermes, intent_message)
 
     def right(self, hermes, intent_message):
-
+        ser.write(b'RIGHT\n')
         self.terminate_feedback(hermes, intent_message)
 
     
@@ -110,3 +109,4 @@ class Skill_RobotCommander:
 
 if __name__ == "__main__":
     Skill_RobotCommander()
+
